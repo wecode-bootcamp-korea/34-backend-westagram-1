@@ -8,6 +8,6 @@ class User(models.Model):
     line            = models.IntegerField(unique=True)
 
     class Meta:
-        db_table = 'users'
+        db_table = 'user'
 
 
