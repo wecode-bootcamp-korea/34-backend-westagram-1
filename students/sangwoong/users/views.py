@@ -1,10 +1,7 @@
-from django.shortcuts import render
-
-import json, re
-
+import json
+import re
 from django.http import JsonResponse
 from django.views import View
-
 from users.models import User
 
 class SignUpView(View):
@@ -32,13 +29,13 @@ class SignUpView(View):
                 return JsonResponse({"Message": "EMAIL_ALREADY_EXIST"}, status=400)
 
             User.objects.create(
-            last_name     = last_name,
-            first_name    = first_name,
-            email         = email,
-            account       = account,
-            password      = password,
-            phone_number  = phone_number,
-            date_of_birth = date_of_birth       
+                last_name     = last_name,
+                first_name    = first_name,
+                email         = email,
+                account       = account,
+                password      = password,
+                phone_number  = phone_number,
+                date_of_birth = date_of_birth       
             )
 
             return JsonResponse({"message": "SUCCESS"}, status=201)
