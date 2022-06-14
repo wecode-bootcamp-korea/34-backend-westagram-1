@@ -1,10 +1,7 @@
-# from django.shortcuts import render
-# from dataclasses import dataclass
-
 import json
 import re
 
-from django.http import JsonResponse
+from django.http  import JsonResponse
 from django.views import View
 
 from users.models import User
