@@ -51,13 +51,6 @@ class LoginView(View):
             data          = json.loads(request.body)
             user_account  = data["account"]
             user_password = data["password"]
-            
-            BLANK_CHECK       = "^$"
-            is_account_blank  = re.match(BLANK_CHECK, user_account)
-            is_password_blank = re.match(BLANK_CHECK, user_password)
-            
-            if is_account_blank or is_password_blank :
-                return JsonResponse({"Message": "CHECK_BLANK"}, status=400)
 
             if not User.objects.filter(account = user_account).exists() :
                 return JsonResponse({"Message": "INVALIDE_USER"}, status=401)
@@ -66,6 +59,6 @@ class LoginView(View):
                 return JsonResponse({"Message": "INVALID_USER"}, status=401)
 
             return JsonResponse({"Message": "SUCCESS"}, status=200)
-        
+
         except KeyError:
             return JsonResponse({"Message": "KEY_ERROR"}, status=400)
