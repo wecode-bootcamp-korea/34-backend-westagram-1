@@ -1,14 +1,14 @@
-from pdb import line_prefix
 from unicodedata import name
 from django.shortcuts import render
 
 import json
 import re
 
-from django.http    import JsonResponse
-from django.views   import View
 
-from users.models   import User
+from django.http  import JsonResponse
+from django.views import View
+
+from users.models import User
 
 class SignUpView(View):
     def post(self, request) :
