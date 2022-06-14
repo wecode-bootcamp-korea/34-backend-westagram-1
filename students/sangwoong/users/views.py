@@ -1,7 +1,9 @@
 import json
 import re
+
 from django.http import JsonResponse
 from django.views import View
+
 from users.models import User
 
 class SignUpView(View):
@@ -16,8 +18,8 @@ class SignUpView(View):
             phone_number  = data["phone_number"]
             date_of_birth = data["date_of_birth"]
 
-            EMAIL_CHECK = "^[a-zA-z0-9+_.]+@[a-zA-z0-9-.]+\.[a-zA-z0-9-.]+$"
-            PW_CHECK    = "^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*#?&])[a-zA-Z\d@$!%*#?&]{8,}$"
+            EMAIL_CHECK   = "^[a-zA-z0-9+_.]+@[a-zA-z0-9-.]+\.[a-zA-z0-9-.]+$"
+            PW_CHECK      = "^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*#?&])[a-zA-Z\d@$!%*#?&]{8,}$"
             
             if not re.match(EMAIL_CHECK, email) :
                 return JsonResponse({"Message": "INVALID_EMAIL"}, status=400)
@@ -42,3 +44,27 @@ class SignUpView(View):
 
         except:
             return JsonResponse({"message": "KEY_ERROR"}, status=400)
+
+class LoginView(View):
+    def post(self, request):
+        try:
+            data          = json.loads(request.body)
+            user_account  = data["account"]
+            user_password = data["password"]
+
+            is_account_blank  = re.match("^$", user_account)
+            is_password_blank = re.match("^$", user_password)
+
+            if is_account_blank or is_password_blank :
+                return JsonResponse({"Message": "KEY_ERROR"}, status=400)
+
+            if not User.objects.filter(account = user_account).exists() :
+                return JsonResponse({"Message": "INVALIDE_USER"}, status=401)
+
+            if User.objects.get(account = user_account).password != user_password :
+                return JsonResponse({"Message": "CHECK_YOUR_ACCOUNT_OR_PASSWORD"}, status=401)
+
+            return JsonResponse({"Message": "SUCCESS"}, status=200)
+        
+        except:
+            return JsonResponse({"Message": "PLEASE_SIGN_UP_BEFORE_USING"}, status=400)
