@@ -2,7 +2,6 @@ import json
 import re
 import bcrypt
 
-
 from django.http import JsonResponse
 from django.views import View
 
