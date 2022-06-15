@@ -1,4 +1,5 @@
 from unicodedata import name
+from weakref import KeyedRef
 from django.shortcuts import render
 
 import json
@@ -42,5 +43,23 @@ class SignUpView(View):
 
             return JsonResponse({"message": "SUCCESS"}, status=201)
 
-        except:
+        except KeyError:
             return JsonResponse({"message": "KEY_ERROR"}, status=400)
+
+class LogInView(View):
+    def post(self, request) :
+        try:
+            data          = json.loads(request.body)
+            email         = data['email']
+            password      = data['password']
+
+            if not User.objects.filter(email=email).exists():
+                return JsonResponse({"Message": "EMAIL_ERROR"}, status=400)
+            if not User.objects.filter(password=password).exists():
+                return JsonResponse({"Message": "PASSWORD_ERROR"}, status=400)
+
+            return JsonResponse({"message": "SUCCESS"}, status=200)
+
+        except KeyError:
+            return JsonResponse({"Message": "KEY_ERROR"}, status=400)
+
