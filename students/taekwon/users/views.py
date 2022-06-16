@@ -1,14 +1,13 @@
 import json
 import re
+
 import bcrypt
 import jwt
-
 from django.http  import JsonResponse
 from django.views import View
-from my_settings import ALGORITHM
 
-from users.models import User
-from westagram.settings import SECRET_KEY, ALGORITHM
+from users.models        import User
+from westagram.settings  import SECRET_KEY, ALGORITHM
 
 class SignUpView(View):
     def post(self, request):
@@ -69,7 +68,7 @@ class SignInView(View):
             valid_user = User.objects.get(email = email)
 
             if not bcrypt.checkpw(password.encode('utf-8') , valid_user.password.encode('utf-8')):
-                return JsonResponse({'message': 'INVALID_PASSWORD'}, status=401)
+                return JsonResponse({'message': 'INVALID_USER'}, status=401)
 
             token = jwt.encode({'user_id': valid_user.id}, SECRET_KEY, ALGORITHM)
 
